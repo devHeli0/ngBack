@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import UserModel from '../database/models/UserModel';
 import * as bcrypt from 'bcrypt';
 var jwt = require('jsonwebtoken');
 

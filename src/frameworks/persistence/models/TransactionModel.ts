@@ -1,7 +1,6 @@
-import { Model, DataTypes, Transaction } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/database';
-import ITransaction from '../../interfaces/ITransaction';
-import AccountModel from './AccountModel';
+import ITransaction from '../../../interfaces/ITransaction';
 
 interface TransactionModel extends ITransaction {}
 
@@ -20,7 +19,7 @@ TransactionModel.init(
       unique: true,
       autoIncrement: true,
       primaryKey: true,
-      allowNull:true
+      allowNull: true,
     },
     debitedAccountId: {
       field: 'debitedAccountId',

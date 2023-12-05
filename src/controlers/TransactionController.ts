@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
-import AccountModel from '../database/models/AccountModel';
-import TransactionModel from '../database/models/TransactionModel';
-import UserModel from '../database/models/UserModel';
+import {
+  UserModel,
+  AccountModel,
+  TransactionModel,
+} from '../frameworks/persistence/models';
 
 class TransactionController {
   public async cashout(

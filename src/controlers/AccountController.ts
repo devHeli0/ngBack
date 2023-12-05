@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import AccountModel from '../database/models/AccountModel';
-import TransactionModel from '../database/models/TransactionModel';
-import UserModel from '../database/models/UserModel';
-var jwt = require('jsonwebtoken'); //import pode n reconherecer, teste antes de usar
+import {
+  AccountModel,
+  UserModel,
+} from '../frameworks/persistence/models';
+var jwt = require('jsonwebtoken');
 
 class AccountController {
   public async getAccount(
@@ -10,7 +11,6 @@ class AccountController {
     res: Response
   ): Promise<Response | void> {
     try {
-      
       let user = await UserModel.findOne({
         where: { id: req.userId },
       });

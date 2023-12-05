@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
-import IUser from '../../interfaces/IUser';
-import { sequelize } from '../config/database';
 import AccountModel from './AccountModel';
+import IUser from '../../../interfaces/IUser';
+import { sequelize } from '../config/database';
 
 interface UserModel extends IUser {}
 
@@ -21,7 +21,7 @@ UserModel.init(
       unique: true,
       autoIncrement: true,
       primaryKey: true,
-      allowNull:true
+      allowNull: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -44,7 +44,7 @@ UserModel.init(
       type: DataTypes.INTEGER,
       field: 'accountId',
       unique: true,
-      allowNull:true
+      allowNull: true,
     },
   },
   {
@@ -54,7 +54,5 @@ UserModel.init(
     sequelize,
   }
 );
-
-//UserModel.belongsTo(AccountModel)
 
 export default UserModel;

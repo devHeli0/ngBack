@@ -1,5 +1,5 @@
+import { UserModel } from "../frameworks/persistence/models";
 import IUser from "../interfaces/IUser";
-import UserModel from "../database/models/UserModel";
 
 export default class UserRepository {
   constructor(private user = UserModel) {

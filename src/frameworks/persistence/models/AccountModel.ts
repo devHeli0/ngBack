@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import IAccount from '../../interfaces/IAccount';
 import { sequelize } from '../config/database';
+import IAccount from '../../../interfaces/IAccount';
 
 interface AccountModel extends IAccount {}
 
@@ -23,7 +23,7 @@ AccountModel.init(
       unique: true,
       autoIncrement: true,
       primaryKey: true,
-      allowNull:true
+      allowNull: true,
     },
     balance: {
       type: DataTypes.FLOAT,

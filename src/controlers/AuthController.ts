@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import UserModel from '../database/models/UserModel';
+import { UserModel } from '../frameworks/persistence/models';
 var jwt = require('jsonwebtoken');
 
 class AuthController {

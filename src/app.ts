@@ -1,20 +1,25 @@
 import express from 'express';
 import cors from 'cors';
-import RegisterRoute from './routes/RegisterRoute';
-import UserRoute from './routes/UserRoute';
-import AccountRoute from './routes/AccountRoute';
-import TransactionRoute from './routes/TransactionsRoute';
-import AuthRoute from './routes/AuthRoute';
+import bodyParser from 'body-parser';
+import {
+  RegisterRoute,
+  UserRoute,
+  AccountRoute,
+  TransactionRoute,
+  AuthRoute,
+} from './routes';
 
 require('dotenv').config();
 
-export class App {
+class Server {
   private express: express.Application;
-  private port = process.env.PORT || 3000;
+  private port = process.env.PORT;
 
   constructor() {
     this.express = express();
-    this.routes();
+    this.configureMiddleware();
+    this.setupRoutes();
+    this.setupErrorHandling();
     this.listen();
   }
 
@@ -22,15 +27,21 @@ export class App {
     return this.express;
   }
 
-  private routes() {
-    this.express.use(express.urlencoded());
-    this.express.use(express.json());
+  private configureMiddleware() {
     this.express.use(cors());
-    this.express.use('/', RegisterRoute);
-    this.express.use('/', UserRoute);
-    this.express.use('/', AccountRoute);
-    this.express.use('/', TransactionRoute);
-    this.express.use('/', AuthRoute);
+    this.express.use(bodyParser.json());
+    this.express.use(bodyParser.urlencoded({ extended: true }));
+  }
+
+  private setupRoutes() {
+    this.express.use('/register', RegisterRoute);
+    this.express.use('/user', UserRoute);
+    this.express.use('/account', AccountRoute);
+    this.express.use('/transactions', TransactionRoute);
+    this.express.use('/auth', AuthRoute);
+  }
+
+  private setupErrorHandling() {
     this.express.use((err, req, res, next) => {
       console.error(err.stack);
       res.status(500).send('Something broke!');
@@ -39,7 +50,11 @@ export class App {
 
   private listen(): void {
     this.express.listen(this.port, () =>
-      console.log(`Running! http://localhost:${process.env.PORT}`)
+      console.log(
+        `Server is running on http://localhost:${this.port}`
+      )
     );
   }
 }
+
+export default new Server().getApp();

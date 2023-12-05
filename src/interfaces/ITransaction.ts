@@ -1,9 +1,9 @@
-export default interface ITransactions {
-    id: number;
-    debitedAccountId: number;
-    creditedAccountId: number;
-  }
+export default interface ITransaction {
+  id: number;
+  debitedAccountId: number;
+  creditedAccountId: number;
+}
 
-  export interface IAccountService {
-    getAllTransactions(): Promise<ITransactions[]>;
-  }
+export interface IAccountService {
+  getAllTransactions(): Promise<ITransaction[]>;
+}

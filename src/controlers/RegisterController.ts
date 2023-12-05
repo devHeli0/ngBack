@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import UserModel from '../database/models/UserModel';
 import * as bcrypt from 'bcrypt';
-import AccountModel from '../database/models/AccountModel';
 var jwt = require('jsonwebtoken');
 
 class RegisterController {
