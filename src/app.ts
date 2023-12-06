@@ -1,4 +1,9 @@
-import express from 'express';
+import express, {
+  ErrorRequestHandler,
+  NextFunction,
+  Request,
+  Response,
+} from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import {
@@ -8,6 +13,7 @@ import {
   TransactionRoute,
   AuthRoute,
 } from './routes';
+import { DatabaseInitializer } from './frameworks/persistence';
 
 require('dotenv').config();
 
@@ -20,6 +26,7 @@ class Server {
     this.configureMiddleware();
     this.setupRoutes();
     this.setupErrorHandling();
+    this.boostrap();
     this.listen();
   }
 
@@ -42,10 +49,21 @@ class Server {
   }
 
   private setupErrorHandling() {
-    this.express.use((err, req, res, next) => {
-      console.error(err.stack);
-      res.status(500).send('Something broke!');
-    });
+    this.express.use(
+      (
+        err: ErrorRequestHandler,
+        req: Request,
+        res: Response,
+        next: NextFunction
+      ) => {
+        console.error(err);
+        res.status(500).send('Something broke!');
+      }
+    );
+  }
+
+  private async boostrap() {
+    await DatabaseInitializer.init();
   }
 
   private listen(): void {

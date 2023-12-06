@@ -1,9 +1,5 @@
-import AccountModel from "./AccountModel"
-import TransactionModel from "./TransactionModel"
-import UserModel from "./UserModel"
+import Account from './Account.model';
+import Transaction from './Transaction.model';
+import User from './User.model';
 
-export {
-    AccountModel,
-    TransactionModel,
-    UserModel
-}
+export { Account, Transaction, User };
