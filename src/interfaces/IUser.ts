@@ -1,10 +1,10 @@
-export default interface IUser {
-    id: number;
-    username: string;
-    password: string;
-    accountId: number;
-  }
+export interface IUser {
+  id: number;
+  username: string;
+  password: string;
+  accountId: number;
+}
 
-  export interface IUserService {
-    getAllUsers(): Promise<IUser[]>;
-  }
+export interface IUserService {
+  getAllUsers(): Promise<IUser[]>;
+}

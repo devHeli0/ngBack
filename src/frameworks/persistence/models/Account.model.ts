@@ -2,39 +2,43 @@ import {
   Table,
   Column,
   Model,
-  Unique,
   CreatedAt,
   DeletedAt,
   UpdatedAt,
   DataType,
-  Default,
-  PrimaryKey,
   BelongsTo,
+  ForeignKey,
+  HasMany,
 } from 'sequelize-typescript';
 import { IAccount } from '../../../interfaces';
 import User from './User.model';
+import Transaction from './Transaction.model';
 
-@Table
+@Table({ tableName: 'Accounts' })
 class Account extends Model<IAccount> {
   @Column({
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     primaryKey: true,
-    defaultValue: DataType.UUIDV4,
+    defaultValue: DataType.UUID,
     allowNull: false,
   })
-  id!: string;
+  declare id: string;
 
   @Column({
-    type: DataType.INTEGER, // ou outro tipo apropriado
+    type: DataType.INTEGER,
     defaultValue: 100,
   })
   balance: number;
 
+  @ForeignKey(() => User)
   @Column
   userId: number;
 
-  @BelongsTo(() => User, 'userId')
+  @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => Transaction)
+  realizedTransactions: Transaction[];
 
   @CreatedAt
   creationDate: Date;

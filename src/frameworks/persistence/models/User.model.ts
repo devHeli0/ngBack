@@ -14,24 +14,15 @@ import {
 import { IUser } from '../../../interfaces';
 import Account from './Account.model';
 
-@Table
+@Table({ tableName: 'Users' })
 class User extends Model<IUser> {
-  @Column({
-    type: DataType.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  })
-  id!: number;
-
   @Column(DataType.TEXT)
   username: string;
 
   @Column(DataType.CHAR)
   password: string;
 
-  @Column(DataType.UUIDV4)
-  @ForeignKey(() => Account)
-  @HasOne(() => Account, 'accountId')
+  @HasOne(() => Account)
   accountId: Account;
 
   @CreatedAt

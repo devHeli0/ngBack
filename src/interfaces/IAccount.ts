@@ -1,8 +1,8 @@
-export default interface IAccount {
-    id: number;
-    balance: number;
-  }
+export interface IAccount {
+  id: string;
+  balance: number;
+}
 
-  export interface IAccountService {
-    getAccount(): Promise<IAccount>;
-  }
+export interface IAccountService {
+  getAccount(): Promise<IAccount>;
+}

@@ -1,4 +1,4 @@
-export default interface ITransaction {
+export interface ITransaction {
   id: number;
   debitedAccountId: number;
   creditedAccountId: number;

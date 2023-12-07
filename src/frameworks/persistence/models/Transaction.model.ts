@@ -1,32 +1,41 @@
-import { Model, DataTypes } from 'sequelize';
-import ITransaction from '../../../interfaces/ITransaction';
+import { ITransaction } from '../../../interfaces/ITransaction';
 import {
+  Model,
   Column,
   CreatedAt,
   DataType,
-  PrimaryKey,
   Table,
-  Unique,
   UpdatedAt,
+  BelongsTo,
+  ForeignKey,
 } from 'sequelize-typescript';
+import Account from './Account.model';
 
-@Table
+@Table({ tableName: 'Transactions' })
 class Transaction extends Model<ITransaction> {
   @Column({
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     primaryKey: true,
     defaultValue: DataType.UUIDV4,
     allowNull: false,
   })
-  id: string;
+  declare id: string;
 
-  @Column(DataType.UUIDV4)
-  debitedAccount: string;
+  @ForeignKey(() => Account)
+  @Column(DataType.UUID)
+  debitedAccountId: string;
 
-  @Column(DataType.UUIDV4)
-  creditedAccount: string;
+  @BelongsTo(() => Account)
+  debitedAccount: Account;
 
-  @Column(DataType.NUMBER)
+  @ForeignKey(() => Account)
+  @Column(DataType.UUID)
+  creditedAccountId: string;
+
+  @BelongsTo(() => Account)
+  creditedAccount: Account;
+
+  @Column(DataType.FLOAT)
   value: number;
 
   @CreatedAt

@@ -1,5 +1,5 @@
-// database.ts
 import { Sequelize } from 'sequelize-typescript';
+import 'reflect-metadata';
 import 'dotenv/config';
 
 class Database {
@@ -14,9 +14,20 @@ class Database {
       dialect: 'postgres',
       port: Number(process.env.DB_PORT),
       logging: false,
-      models: [__dirname + '/models/**/*.model.ts'],
+      models: [__dirname + '/../models/**/*.model.ts'],
+      modelMatch: (filename, member) => {
+        return (
+          filename.substring(0, filename.indexOf('.model')) ===
+          member.toLowerCase()
+        );
+      },
+    });
+    this.sequelize.addHook('afterBulkSync', () => {
+      console.log('Models sincronizados:', this.sequelize.models);
     });
   }
 }
 
-export default new Database().sequelize;
+const database = new Database().sequelize;
+
+export default database;
