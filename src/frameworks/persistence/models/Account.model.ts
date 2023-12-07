@@ -22,7 +22,7 @@ class Account extends Model<IAccount> {
     defaultValue: DataType.UUID,
     allowNull: false,
   })
-  declare id: string;
+  declare id: Account;
 
   @Column({
     type: DataType.INTEGER,

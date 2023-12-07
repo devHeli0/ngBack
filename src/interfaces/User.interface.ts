@@ -1,3 +1,5 @@
+import { User } from "../frameworks/persistence/models";
+
 export interface IUser {
   id: number;
   username: string;
@@ -7,4 +9,5 @@ export interface IUser {
 
 export interface IUserService {
   getAllUsers(): Promise<IUser[]>;
+  registerUser(username: string, password: string): Promise<User>;
 }
