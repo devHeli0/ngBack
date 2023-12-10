@@ -1,53 +1,41 @@
-import { NextFunction, Request, Response } from 'express';
-import * as bcrypt from 'bcrypt';
-var jwt = require('jsonwebtoken');
+import { Request, Response } from 'express';
 
-class UserController {
-  public async login(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response> {
+import { Controller, Get, Post } from '@overnightjs/core';
+
+import { GetAllUsersUseCase, RegisterUserUseCase } from '../useCases';
+import { UserEntity } from '../domain/entities';
+
+@Controller('api/user')
+export class UserController {
+  constructor(
+    private getAllUsersUseCase: GetAllUsersUseCase,
+    private registerUserUseCase: RegisterUserUseCase
+  ) {
+    this.getAllUsersUseCase = getAllUsersUseCase;
+    this.registerUserUseCase = registerUserUseCase;
+  }
+
+  @Get('getAll')
+  async getAllUsers(req: Request, res: Response): Promise<void> {
+    try {
+      const users: UserEntity[] =
+        await this.getAllUsersUseCase.execute();
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
+  @Post('register')
+  async registerUser(req: Request, res: Response): Promise<void> {
     try {
       const { username, password } = req.body;
-
-      let user = await UserModel.findOne({
-        where: { username },
-      });
-
-      const password_valid = await bcrypt.compare(
-        password,
-        user.password
-      );
-
-      if (!user) {
-        return res
-          .status(400)
-          .send({ message: 'Usuário ou senha inválido!' });
-      } else {
-        if (!password_valid) {
-          res
-            .status(400)
-            .send({ message: 'Usuário ou senha inválido!' });
-          return;
-        } else {
-          const AccessToken = jwt.sign({ id: user.id }, 'secret', {
-            expiresIn: '24h',
-          });
-          const answer = {
-            user: user.username,
-            password: user.password,
-            AccessToken: AccessToken,
-            message: 'Entrando...',
-          };
-          res.send(answer);
-          next();
-          return;
-        }
-      }
+      const newUser: UserEntity =
+        await this.registerUserUseCase.execute(username, password);
+      res.status(201).json(newUser);
     } catch (error) {
-      next(error);
+      console.log(error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }
-export default new UserController();

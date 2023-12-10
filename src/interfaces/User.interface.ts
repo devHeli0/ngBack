@@ -1,13 +1,18 @@
-import { User } from "../frameworks/persistence/models";
+import { IAccount } from '.';
+import { User } from '../frameworks/persistence/models';
 
 export interface IUser {
   id: number;
   username: string;
   password: string;
-  accountId: number;
+  accountId: IAccount;
+}
+export interface IUserRepository {
+  createUser(username: string, password: string): Promise<User>;
+  getUserById(userId: number): Promise<IUser | null>;
+  getAllUsers(): Promise<IUser[]>;
 }
 
 export interface IUserService {
-  getAllUsers(): Promise<IUser[]>;
   registerUser(username: string, password: string): Promise<User>;
 }

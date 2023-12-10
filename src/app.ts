@@ -1,65 +1,65 @@
-import express, {
-  ErrorRequestHandler,
-  NextFunction,
-  Request,
-  Response,
-} from 'express';
+import { Server } from '@overnightjs/core';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import {
-  RegisterRoute,
-  UserRoute,
-  AccountRoute,
-  TransactionRoute,
-  AuthRoute,
-} from './routes';
+import { UserController } from './controlers';
 import { DatabaseInitializer } from './frameworks/persistence';
+import { GetAllUsersUseCase, RegisterUserUseCase } from './useCases';
+import { UserRepository } from './frameworks/persistence/repositories/userRepository';
 
 require('dotenv').config();
 
-class Server {
-  private express: express.Application;
+class App extends Server {
   private port = process.env.PORT;
 
   constructor() {
-    this.express = express();
+    super();
     this.configureMiddleware();
-    this.setupRoutes();
+    this.setupControllers();
     this.setupErrorHandling();
     this.boostrap();
     this.listen();
   }
 
-  public getApp(): express.Application {
-    return this.express;
+  public getApp() {
+    return this.app;
   }
 
   private configureMiddleware() {
-    this.express.use(cors());
-    this.express.use(bodyParser.json());
-    this.express.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(cors());
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
   }
 
-  private setupRoutes() {
-    this.express.use('/register', RegisterRoute);
-    this.express.use('/user', UserRoute);
-    this.express.use('/account', AccountRoute);
-    this.express.use('/transactions', TransactionRoute);
-    this.express.use('/auth', AuthRoute);
+  private setupDependencies() {
+    const userRepository = new UserRepository();
+    const getAllUsersUseCase = new GetAllUsersUseCase(userRepository);
+    const registerUserUseCase = new RegisterUserUseCase(
+      userRepository
+    );
+
+    return {
+      getAllUsersUseCase,
+      registerUserUseCase,
+    };
+  }
+
+  private setupControllers() {
+    const { getAllUsersUseCase, registerUserUseCase } =
+      this.setupDependencies();
+
+    const userController = new UserController(
+      getAllUsersUseCase,
+      registerUserUseCase
+    );
+
+    super.addControllers([userController]);
   }
 
   private setupErrorHandling() {
-    this.express.use(
-      (
-        err: ErrorRequestHandler,
-        req: Request,
-        res: Response,
-        next: NextFunction
-      ) => {
-        console.error(err);
-        res.status(500).send('Something broke!');
-      }
-    );
+    this.app.use((err, req, res, next) => {
+      console.error(err);
+      res.status(500).send('Something broke!');
+    });
   }
 
   private async boostrap() {
@@ -67,12 +67,10 @@ class Server {
   }
 
   private listen(): void {
-    this.express.listen(this.port, () =>
-      console.log(
-        `Server is running on http://localhost:${this.port}`
-      )
+    this.app.listen(this.port, () =>
+      console.log(`App is running on http://localhost:${this.port}`)
     );
   }
 }
 
-export default new Server().getApp();
+export default new App().getApp();

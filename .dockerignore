@@ -1,6 +1,20 @@
-build
+# Node.js
 node_modules/
-yarn-error.log
-npm-debug.log
-.env.example
+dist/
 
+# Yarn
+yarn-error.log
+yarn.lock
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Build files
+build/
+
+# TypeScript cache
+tsconfig.tsbuildinfo

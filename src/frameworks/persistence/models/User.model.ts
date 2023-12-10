@@ -8,8 +8,6 @@ import {
   UpdatedAt,
   DataType,
   HasOne,
-  PrimaryKey,
-  ForeignKey,
   Length,
   Contains,
   AllowNull,
@@ -50,7 +48,8 @@ class User extends Model<IUser> {
       id: user.id,
     });
 
-    user.accountId = account.id;
+    user.accountId = account;
+    user.accountId.id = account.id; // Ajuste aqui
   }
 }
 
