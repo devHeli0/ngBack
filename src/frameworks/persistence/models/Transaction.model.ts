@@ -8,18 +8,20 @@ import {
   UpdatedAt,
   BelongsTo,
   ForeignKey,
+  PrimaryKey,
+  Default,
+  AllowNull,
 } from 'sequelize-typescript';
 import Account from './Account.model';
+import { UUID } from 'crypto';
 
 @Table({ tableName: 'Transactions' })
 class Transaction extends Model<ITransaction> {
-  @Column({
-    type: DataType.UUID,
-    primaryKey: true,
-    defaultValue: DataType.UUIDV4,
-    allowNull: false,
-  })
-  declare id: string;
+  @Default(DataType.UUIDV4)
+  @AllowNull(false)
+  @PrimaryKey
+  @Column(DataType.UUID)
+  declare id: UUID;
 
   @ForeignKey(() => Account)
   @Column(DataType.UUID)

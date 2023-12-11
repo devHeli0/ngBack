@@ -1,5 +1,7 @@
+import { UUID } from "crypto";
+
 export interface ITransaction {
-  id: number;
+  id: UUID;
   debitedAccountId: number;
   creditedAccountId: number;
 }
