@@ -14,7 +14,6 @@ export class UserRepository implements IUserRepository {
     const newUser = await User.create({
       username,
       password,
-      accountId: { balance: 0 }, // ou qualquer valor padrão que você queira definir
     });
 
     return newUser;
@@ -30,7 +29,7 @@ export class UserRepository implements IUserRepository {
       id: user.id,
       username: user.username,
       password: user.password,
-      accountId: user.accountId as unknown as IAccount,
+      accountId: user.account as unknown as IAccount,
     }));
     return mappedUsers;
   }

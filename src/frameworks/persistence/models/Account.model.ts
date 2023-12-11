@@ -9,10 +9,14 @@ import {
   BelongsTo,
   ForeignKey,
   HasMany,
+  NotNull,
+  Default,
+  AllowNull,
 } from 'sequelize-typescript';
 import { IAccount } from '../../../interfaces';
 import User from './User.model';
 import Transaction from './Transaction.model';
+import { NonAttribute } from 'sequelize';
 
 @Table({ tableName: 'Accounts' })
 class Account extends Model<IAccount> {
@@ -24,21 +28,23 @@ class Account extends Model<IAccount> {
   })
   declare id: string;
 
-  @Column({
-    type: DataType.INTEGER,
-    defaultValue: 100,
-  })
+  @Default(100)
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
   balance: number;
 
-  @ForeignKey(() => User)
-  @Column
-  userId: number;
+  @BelongsTo(() => User, 'userId')
+  declare user?: NonAttribute<User>;
 
-  @BelongsTo(() => User)
-  user: User;
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  declare userId: number;
 
-  @HasMany(() => Transaction)
+  @HasMany(() => Transaction, 'debitedAccountId')
   realizedTransactions: Transaction[];
+
+  // @HasMany(() => Transaction, 'creditedAccountId')
+  // creditedAccounts: Transaction[];
 
   @CreatedAt
   creationDate: Date;

@@ -1,6 +1,7 @@
 export interface IAccount {
   id: string;
-  balance: number;
+  balance?: number;
+  userId: number;
 }
 
 export interface IAccountService {
