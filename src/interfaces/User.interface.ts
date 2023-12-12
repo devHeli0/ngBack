@@ -4,6 +4,9 @@ export interface IUser {
   id: number;
   username: string;
   password: string;
+  creationDate: Date;
+  updatedOn: Date;
+  deletionDate?: Date;
 }
 
 export interface IUserRepository {

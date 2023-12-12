@@ -7,13 +7,13 @@ import {
   Table,
   UpdatedAt,
   BelongsTo,
-  ForeignKey,
   PrimaryKey,
   Default,
   AllowNull,
 } from 'sequelize-typescript';
 import Account from './Account.model';
 import { UUID } from 'crypto';
+import { NonAttribute } from 'sequelize';
 
 @Table({ tableName: 'Transactions' })
 class Transaction extends Model<ITransaction> {
@@ -23,20 +23,21 @@ class Transaction extends Model<ITransaction> {
   @Column(DataType.UUID)
   declare id: UUID;
 
-  @ForeignKey(() => Account)
+  @BelongsTo(() => Account, 'debitedAccountId')
+  declare debitedAccount?: NonAttribute<Account>;
+
+  @AllowNull(false)
   @Column(DataType.UUID)
-  debitedAccountId: string;
+  debitedAccountId: UUID;
 
-  @BelongsTo(() => Account)
-  debitedAccount: Account;
+  @BelongsTo(() => Account, 'creditedAccountId')
+  declare creditedAccount?: NonAttribute<Account>;
 
-  @ForeignKey(() => Account)
+  @AllowNull(false)
   @Column(DataType.UUID)
-  creditedAccountId: string;
+  creditedAccountId: UUID;
 
-  @BelongsTo(() => Account)
-  creditedAccount: Account;
-
+  @AllowNull(false)
   @Column(DataType.FLOAT)
   value: number;
 

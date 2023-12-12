@@ -17,7 +17,7 @@ import {
 } from 'sequelize-typescript';
 import { IUser } from '../../../interfaces';
 import Account from './Account.model';
-import { CreationOptional, NonAttribute } from 'sequelize';
+import { CreationOptional } from 'sequelize';
 
 @Table({ tableName: 'Users' })
 class User extends Model<IUser> {
@@ -48,9 +48,11 @@ class User extends Model<IUser> {
 
   @AfterCreate
   static async generateAccount(user: User): Promise<void> {
+    const balanceDefaultValue: number = 100;
     await Account.create({
       id: uuidv4(),
       userId: user.id,
+      balance: balanceDefaultValue,
     });
   }
 }
