@@ -15,7 +15,7 @@ export class UserController {
     this.registerUserUseCase = registerUserUseCase;
   }
 
-  @Get('getAll')
+  @Get('getAllUsers')
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const users: UserEntity[] =

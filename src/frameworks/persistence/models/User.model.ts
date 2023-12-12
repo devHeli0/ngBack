@@ -31,20 +31,20 @@ class User extends Model<IUser> {
   @Unique
   @AllowNull(false)
   @Column(DataType.TEXT)
-  username: string;
+  declare username: string;
 
   @AllowNull(false)
   @Column(DataType.CHAR)
-  password: string;
+  declare password: string;
 
   @CreatedAt
-  creationDate: Date;
+  declare creationDate: Date;
 
   @UpdatedAt
-  updatedOn: Date;
+  declare updatedOn: Date;
 
   @DeletedAt
-  deletionDate: Date;
+  declare deletionDate: Date;
 
   @AfterCreate
   static async generateAccount(user: User): Promise<void> {

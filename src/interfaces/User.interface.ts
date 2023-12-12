@@ -1,7 +1,8 @@
+import { UserEntity } from '../domain/entities';
 import { User } from '../frameworks/persistence/models';
 
 export interface IUser {
-  id: number;
+  id?: number;
   username: string;
   password: string;
   creationDate: Date;
@@ -16,5 +17,5 @@ export interface IUserRepository {
 }
 
 export interface IUserService {
-  registerUser(username: string, password: string): Promise<User>;
+  registerUser(username: string, password: string): Promise<UserEntity>;
 }

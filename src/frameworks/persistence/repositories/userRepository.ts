@@ -1,9 +1,5 @@
-// UserRepository.ts
-import {
-  IAccount,
-  IUser,
-  IUserRepository,
-} from '../../../interfaces';
+import { UserEntity } from '../../../domain/entities';
+import { IUser, IUserRepository } from '../../../interfaces';
 import { User } from '../models';
 
 export class UserRepository implements IUserRepository {
@@ -14,22 +10,37 @@ export class UserRepository implements IUserRepository {
     const newUser = await User.create({
       username,
       password,
+      creationDate: new Date(),
+      updatedOn: new Date(),
     });
 
     return newUser;
   }
-  getUserById(userId: number): Promise<IUser | null> {
-    throw new Error('Method not implemented.');
+
+  async getUserById(userId: number): Promise<IUser | null> {
+    const user = await User.findByPk(userId);
+    if (user) {
+      return {
+        id: user.id,
+        username: user.username,
+        password: user.password,
+        creationDate: user.creationDate,
+        updatedOn: user.updatedOn,
+      };
+    }
+    return null;
   }
 
-  // Ajuste no método getAllUsers na classe UserRepository
   async getAllUsers(): Promise<IUser[]> {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      attributes: ['id', 'username', 'creationDate', 'updatedOn'],
+    });
     const mappedUsers: IUser[] = users.map((user) => ({
       id: user.id,
       username: user.username,
       password: user.password,
-      accountId: user.account as unknown as IAccount,
+      creationDate: user.creationDate,
+      updatedOn: user.updatedOn,
     }));
     return mappedUsers;
   }
