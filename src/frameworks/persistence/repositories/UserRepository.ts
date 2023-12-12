@@ -1,4 +1,3 @@
-import { UserEntity } from '../../../domain/entities';
 import { IUser, IUserRepository } from '../../../interfaces';
 import { User } from '../models';
 

@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import { UserController } from './controlers';
 import { DatabaseInitializer } from './frameworks/persistence';
 import { GetAllUsersUseCase, RegisterUserUseCase } from './useCases';
-import { UserRepository } from './frameworks/persistence/repositories/userRepository';
+import { UserRepository } from './frameworks/persistence/repositories/UserRepository';
 
 require('dotenv').config();
 

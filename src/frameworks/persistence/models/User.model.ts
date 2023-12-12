@@ -45,16 +45,6 @@ class User extends Model<IUser> {
 
   @DeletedAt
   declare deletionDate: Date;
-
-  @AfterCreate
-  static async generateAccount(user: User): Promise<void> {
-    const balanceDefaultValue: number = 100;
-    await Account.create({
-      id: uuidv4(),
-      userId: user.id,
-      balance: balanceDefaultValue,
-    });
-  }
 }
 
 export default User;

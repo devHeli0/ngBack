@@ -1,5 +1,7 @@
 import { UserEntity } from '../domain/entities';
+import AccountRepository from '../frameworks/persistence/repositories/AccountRepository';
 import { IUser, IUserRepository } from '../interfaces';
+import { IAccountRepository } from '../interfaces/Account.interface';
 
 export class GetAllUsersUseCase {
   constructor(private userRepository: IUserRepository) {}
@@ -21,7 +23,10 @@ export class GetAllUsersUseCase {
 }
 
 export class RegisterUserUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(
+    private userRepository: IUserRepository,
+    private accountRepository: IAccountRepository
+  ) {}
 
   async execute(
     username: string,
@@ -31,7 +36,8 @@ export class RegisterUserUseCase {
       username,
       password
     );
-    return new UserEntity(
+
+    const user = new UserEntity(
       newUser.id,
       newUser.username,
       newUser.password,
@@ -39,5 +45,9 @@ export class RegisterUserUseCase {
       newUser.updatedOn,
       newUser.deletionDate
     );
+
+    await this.accountRepository.createAccountForUser(newUser);
+
+    return user;
   }
 }

@@ -5,6 +5,8 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { GetAllUsersUseCase, RegisterUserUseCase } from '../useCases';
 import { UserEntity } from '../domain/entities';
 
+import * as bcrypt from 'bcrypt';
+
 @Controller('api/user')
 export class UserController {
   constructor(
