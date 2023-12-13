@@ -7,4 +7,7 @@ export {
   //User
   GetAllUsersUseCase,
   RegisterUserUseCase,
+
+  //Account
+  // CreateAccountUseCase
 };

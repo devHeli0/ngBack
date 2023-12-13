@@ -1,3 +1,7 @@
 export class AccountEntity {
-  constructor(public id: number, public balance: number) {}
+  constructor(
+    public id: string,
+    public userId: number,
+    public balance: number
+  ) {}
 }

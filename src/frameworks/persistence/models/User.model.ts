@@ -28,7 +28,7 @@ class User extends Model<IUser> {
   declare id: CreationOptional<number>;
 
   @Length({ min: 3, max: 15 })
-  @Unique
+  // @Unique
   @AllowNull(false)
   @Column(DataType.TEXT)
   declare username: string;

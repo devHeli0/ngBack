@@ -32,9 +32,11 @@ export class UserController {
   async registerUser(req: Request, res: Response): Promise<void> {
     try {
       const { username, password } = req.body;
-      const newUser: UserEntity =
-        await this.registerUserUseCase.execute(username, password);
-      res.status(201).json(newUser);
+      const { user, account } = await this.registerUserUseCase.execute(
+        username,
+        password
+      );
+      res.status(201).json({user, account});
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: 'Internal Server Error' });

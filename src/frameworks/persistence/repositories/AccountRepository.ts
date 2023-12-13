@@ -1,32 +1,15 @@
-import { Model, Sequelize } from 'sequelize';
-import { IAccount } from '../../../interfaces';
-import { Account, User } from '../models';
+import { Account } from '../models';
 import { v4 as uuidv4 } from 'uuid';
-import { IAccountRepository } from '../../../interfaces/Account.interface';
+import { IAccountRepository } from '../../../interfaces';
 
-class AccountRepository implements IAccountRepository {
-  async createAccountForUser(user: User): Promise<Account> {
+export class AccountRepository implements IAccountRepository {
+  async createAccountForUser(userId: number): Promise<Account> {
     const balanceDefaultValue: number = 100;
-    return await Account.create({
+    const newAccount = await Account.create({
       id: uuidv4(),
-      userId: user.id,
+      userId: userId,
       balance: balanceDefaultValue,
     });
-  }
-
-  async getAccountById(accountId: string): Promise<IAccount | null> {
-    const account = await Account.findByPk(accountId);
-    if (account) {
-      return {
-        id: account.id,
-        balance: account.balance,
-        userId: account.userId,
-        creationDate: account.creationDate,
-        updatedOn: account.updatedOn,
-      };
-    }
-    return null;
+    return newAccount;
   }
 }
-
-export default AccountRepository;
