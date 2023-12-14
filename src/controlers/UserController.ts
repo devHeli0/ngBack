@@ -6,11 +6,14 @@ import { GetAllUsersUseCase, RegisterUserUseCase } from '../useCases';
 import { UserEntity } from '../domain/entities';
 
 import * as bcrypt from 'bcrypt';
+import { inject, injectable } from 'inversify';
 
+@injectable()
 @Controller('api/user')
 export class UserController {
   constructor(
     private getAllUsersUseCase: GetAllUsersUseCase,
+    @inject('RegisterUserUseCase')
     private registerUserUseCase: RegisterUserUseCase
   ) {
     this.getAllUsersUseCase = getAllUsersUseCase;
@@ -32,11 +35,9 @@ export class UserController {
   async registerUser(req: Request, res: Response): Promise<void> {
     try {
       const { username, password } = req.body;
-      const { user, account } = await this.registerUserUseCase.execute(
-        username,
-        password
-      );
-      res.status(201).json({user, account});
+      const { user, account } =
+        await this.registerUserUseCase.execute(username, password);
+      res.status(201).json({ user, account });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: 'Internal Server Error' });

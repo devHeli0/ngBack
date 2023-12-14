@@ -1,9 +1,6 @@
+import { inject, injectable } from 'inversify';
 import { AccountEntity, UserEntity } from '../domain/entities';
-import {
-  IAccountRepository,
-  IUser,
-  IUserRepository,
-} from '../interfaces';
+import { IAccountRepository, IUserRepository } from '../interfaces';
 
 export class GetAllUsersUseCase {
   constructor(private userRepository: IUserRepository) {}
@@ -11,7 +8,7 @@ export class GetAllUsersUseCase {
   async execute(): Promise<UserEntity[]> {
     const users = await this.userRepository.getAllUsers();
     return users.map(
-      (user: IUser) =>
+      (user: UserEntity) =>
         new UserEntity(
           user.id,
           user.username,
@@ -24,9 +21,12 @@ export class GetAllUsersUseCase {
   }
 }
 
+@injectable()
 export class RegisterUserUseCase {
   constructor(
+    @inject('IUserRepository')
     private userRepository: IUserRepository,
+    @inject('IAccountRepository')
     private accountRepository: IAccountRepository
   ) {}
 
@@ -39,11 +39,8 @@ export class RegisterUserUseCase {
       password
     );
 
-    const account = await this.accountRepository.createAccountForUser(
-      52
-    );
-
-    console.log(`${account} ##################### ${newUser.id}`);
+    const newAccount =
+      await this.accountRepository.createAccountForUser(newUser.id);
 
     const user = new UserEntity(
       newUser.id,
@@ -54,12 +51,8 @@ export class RegisterUserUseCase {
       newUser.deletionDate
     );
 
-    const accountEntity = new AccountEntity(
-      account.id,
-      newUser.id,
-      100
-    );
+    const account = new AccountEntity(newAccount.id, newUser.id, 100);
 
-    return { user, account: accountEntity };
+    return { user, account };
   }
 }

@@ -1,5 +1,5 @@
 import { ITransaction } from '.';
-import { Account } from '../frameworks/persistence/models';
+import { AccountEntity } from '../domain/entities';
 
 export interface IAccount {
   id: string;
@@ -12,8 +12,7 @@ export interface IAccount {
 }
 
 export interface IAccountRepository {
-  createAccountForUser(userId: number): Promise<Account>;
-  // getAccountById(accountId: string): Promise<IAccount | null>;
+  createAccountForUser(userId: number): Promise<AccountEntity>;
 }
 
 export interface IAccountService {

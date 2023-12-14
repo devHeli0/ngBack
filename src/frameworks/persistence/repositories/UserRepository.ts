@@ -1,3 +1,4 @@
+import { UserEntity } from '../../../domain/entities';
 import { IUser, IUserRepository } from '../../../interfaces';
 import { User } from '../models';
 
@@ -5,7 +6,7 @@ export class UserRepository implements IUserRepository {
   async createUser(
     username: string,
     password: string
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     const newUser = await User.create({
       username,
       password,
@@ -16,7 +17,7 @@ export class UserRepository implements IUserRepository {
     return newUser;
   }
 
-  async getUserById(userId: number): Promise<IUser | null> {
+  async getUserById(userId: number): Promise<UserEntity | null> {
     const user = await User.findByPk(userId);
     if (user) {
       return {
@@ -30,11 +31,11 @@ export class UserRepository implements IUserRepository {
     return null;
   }
 
-  async getAllUsers(): Promise<IUser[]> {
+  async getAllUsers(): Promise<UserEntity[]> {
     const users = await User.findAll({
       attributes: ['id', 'username', 'creationDate', 'updatedOn'],
     });
-    const mappedUsers: IUser[] = users.map((user) => ({
+    const mappedUsers: UserEntity[] = users.map((user) => ({
       id: user.id,
       username: user.username,
       password: user.password,

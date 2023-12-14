@@ -1,10 +1,10 @@
 export class UserEntity {
   constructor(
-    public id: number | undefined,
+    public id: number,
     public username: string,
     public password: string,
-    public creationDate: Date,
-    public updatedOn: Date,
-    public deletionDate: Date | undefined
+    public creationDate?: Date,
+    public updatedOn?: Date,
+    public deletionDate?: Date | undefined
   ) {}
 }

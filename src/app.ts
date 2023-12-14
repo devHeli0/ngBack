@@ -5,6 +5,8 @@ import { UserController } from './controlers';
 import { DatabaseInitializer } from './frameworks/persistence';
 import { GetAllUsersUseCase, RegisterUserUseCase } from './useCases';
 import { UserRepository } from './frameworks/persistence/repositories/UserRepository';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import { AccountRepository } from './frameworks/persistence/repositories/AccountRepository';
 
 require('dotenv').config();
 
@@ -32,9 +34,11 @@ class App extends Server {
 
   private setupDependencies() {
     const userRepository = new UserRepository();
+    const accountRepository = new AccountRepository();
     const getAllUsersUseCase = new GetAllUsersUseCase(userRepository);
     const registerUserUseCase = new RegisterUserUseCase(
-      userRepository
+      userRepository,
+      accountRepository
     );
 
     return {
@@ -44,6 +48,8 @@ class App extends Server {
   }
 
   private setupControllers() {
+    // const server = new InversifyExpressServer(this.container);
+
     const { getAllUsersUseCase, registerUserUseCase } =
       this.setupDependencies();
 

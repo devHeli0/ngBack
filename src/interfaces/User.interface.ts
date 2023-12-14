@@ -11,11 +11,14 @@ export interface IUser {
 }
 
 export interface IUserRepository {
-  createUser(username: string, password: string): Promise<User>;
-  getUserById(userId: number): Promise<IUser | null>;
-  getAllUsers(): Promise<IUser[]>;
+  createUser(username: string, password: string): Promise<UserEntity>;
+  getUserById(userId: number): Promise<UserEntity | null>;
+  getAllUsers(): Promise<UserEntity[]>;
 }
 
 export interface IUserService {
-  registerUser(username: string, password: string): Promise<UserEntity>;
+  registerUser(
+    username: string,
+    password: string
+  ): Promise<UserEntity>;
 }
