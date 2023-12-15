@@ -1,11 +1,12 @@
-import { UUID } from "crypto";
+import { TransactionEntity } from '../domain/entities';
 
 export interface ITransaction {
-  id: UUID;
-  debitedAccountId: number;
-  creditedAccountId: number;
+  id: string;
+  debitedAccountId: string;
+  creditedAccountId: string;
+  creationDate: Date;
 }
 
-export interface IAccountService {
-  getAllTransactions(): Promise<ITransaction[]>;
+export interface ITransactionRepository {
+  createTransaction(transactionData: any): Promise<TransactionEntity>;
 }

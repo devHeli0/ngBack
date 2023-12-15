@@ -11,12 +11,12 @@ import {
   AllowNull,
   Default,
   PrimaryKey,
+  IsUUID,
 } from 'sequelize-typescript';
 import { IAccount } from '../../../interfaces';
 import User from './User.model';
 import Transaction from './Transaction.model';
-import { NonAttribute, UUIDV4 } from 'sequelize';
-import { UUID } from 'crypto';
+import { NonAttribute } from 'sequelize';
 
 const DEFAULT_BALANCE = 100;
 
@@ -24,8 +24,9 @@ const DEFAULT_BALANCE = 100;
 class Account extends Model<IAccount> {
   @AllowNull(false)
   @PrimaryKey
-  @Column(UUIDV4)
-  declare id: UUID;
+  @IsUUID(4)
+  @Column
+  declare id: string;
 
   @Default(DEFAULT_BALANCE)
   @AllowNull(false)

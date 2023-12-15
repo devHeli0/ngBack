@@ -17,8 +17,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "inversify": "^6.0.2",
-    "inversify-express-utils": "^6.4.6",
     "jsonwebtoken": "^8.5.1",
     "jws": "^4.0.0",
     "pg": "^8.8.0",

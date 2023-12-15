@@ -1,4 +1,3 @@
-import { inject, injectable } from 'inversify';
 import { AccountEntity, UserEntity } from '../domain/entities';
 import { IAccountRepository, IUserRepository } from '../interfaces';
 
@@ -21,12 +20,9 @@ export class GetAllUsersUseCase {
   }
 }
 
-@injectable()
 export class RegisterUserUseCase {
   constructor(
-    @inject('IUserRepository')
     private userRepository: IUserRepository,
-    @inject('IAccountRepository')
     private accountRepository: IAccountRepository
   ) {}
 

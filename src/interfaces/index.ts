@@ -4,9 +4,16 @@ import {
   IUserService,
 } from './User.interface';
 import { IAccount, IAccountRepository } from './Account.interface';
-import { ITransaction } from './Transaction.interface';
+import {
+  ITransaction,
+  ITransactionRepository,
+} from './Transaction.interface';
+import { IDatabaseConfig } from './Database.interface';
 
 export {
+  //Database
+  IDatabaseConfig,
+
   //User
   IUser,
   IUserService,
@@ -18,4 +25,5 @@ export {
 
   //Transaction
   ITransaction,
+  ITransactionRepository,
 };

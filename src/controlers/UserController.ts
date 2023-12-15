@@ -6,14 +6,11 @@ import { GetAllUsersUseCase, RegisterUserUseCase } from '../useCases';
 import { UserEntity } from '../domain/entities';
 
 import * as bcrypt from 'bcrypt';
-import { inject, injectable } from 'inversify';
 
-@injectable()
 @Controller('api/user')
 export class UserController {
   constructor(
     private getAllUsersUseCase: GetAllUsersUseCase,
-    @inject('RegisterUserUseCase')
     private registerUserUseCase: RegisterUserUseCase
   ) {
     this.getAllUsersUseCase = getAllUsersUseCase;

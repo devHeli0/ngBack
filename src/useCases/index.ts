@@ -1,5 +1,4 @@
 import {
-  CreateUserAndAccountUseCase,
   GetAllUsersUseCase,
   RegisterUserUseCase,
 } from './User.useCases';
@@ -10,5 +9,4 @@ export {
   RegisterUserUseCase,
 
   //Account
-  CreateUserAndAccountUseCase
 };

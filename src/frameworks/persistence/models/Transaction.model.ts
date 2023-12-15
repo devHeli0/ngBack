@@ -5,14 +5,13 @@ import {
   CreatedAt,
   DataType,
   Table,
-  UpdatedAt,
   BelongsTo,
   PrimaryKey,
   Default,
   AllowNull,
+  IsUUID,
 } from 'sequelize-typescript';
 import Account from './Account.model';
-import { UUID } from 'crypto';
 import { NonAttribute } from 'sequelize';
 
 @Table({ tableName: 'Transactions' })
@@ -20,22 +19,25 @@ class Transaction extends Model<ITransaction> {
   @Default(DataType.UUIDV4)
   @AllowNull(false)
   @PrimaryKey
-  @Column(DataType.UUID)
-  declare id: UUID;
+  @IsUUID(4)
+  @Column
+  declare id: string;
 
   @BelongsTo(() => Account, 'debitedAccountId')
   declare debitedAccount?: NonAttribute<Account>;
 
   @AllowNull(false)
-  @Column(DataType.UUID)
-  debitedAccountId: UUID;
+  @IsUUID(4)
+  @Column
+  debitedAccountId: string;
 
   @BelongsTo(() => Account, 'creditedAccountId')
   declare creditedAccount?: NonAttribute<Account>;
 
   @AllowNull(false)
-  @Column(DataType.UUID)
-  creditedAccountId: UUID;
+  @IsUUID(4)
+  @Column
+  creditedAccountId: string;
 
   @AllowNull(false)
   @Column(DataType.FLOAT)
@@ -43,9 +45,6 @@ class Transaction extends Model<ITransaction> {
 
   @CreatedAt
   creationDate: Date;
-
-  @UpdatedAt
-  updatedOn: Date;
 }
 
 export default Transaction;

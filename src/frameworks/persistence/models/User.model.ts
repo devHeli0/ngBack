@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   Table,
   Column,
@@ -13,10 +11,8 @@ import {
   AllowNull,
   PrimaryKey,
   AutoIncrement,
-  AfterCreate,
 } from 'sequelize-typescript';
 import { IUser } from '../../../interfaces';
-import Account from './Account.model';
 import { CreationOptional } from 'sequelize';
 
 @Table({ tableName: 'Users' })
@@ -28,7 +24,7 @@ class User extends Model<IUser> {
   declare id: CreationOptional<number>;
 
   @Length({ min: 3, max: 15 })
-  // @Unique
+  @Unique
   @AllowNull(false)
   @Column(DataType.TEXT)
   declare username: string;
