@@ -1,14 +1,15 @@
-FROM node:16-alpine
+FROM node:16.14-alpine
 
-WORKDIR /NG_APP/ngBackDev
+WORKDIR /CT_ngBackDev
 
-COPY . /NG_APP/ngBackDev
-
-VOLUME [ "./ngBackDev/package.json", "/NG_APP/ngBackDev" ] 
+COPY package* .
 
 RUN yarn install
 
-EXPOSE 3000
+COPY . .
 
-CMD ["yarn", "dev"]
+EXPOSE 3001
+
+ENTRYPOINT [ "yarn" ]
+CMD ["dev"]
 
