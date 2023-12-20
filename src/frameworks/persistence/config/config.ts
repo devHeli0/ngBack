@@ -1,9 +1,9 @@
 import 'dotenv/config';
-import { Options } from 'sequelize';
+import { SequelizeOptions } from 'sequelize-typescript';
 
 const { DB_USER, DB_PASS, DB_NAME, DB_HOST } = process.env;
 
-const config: Options = {
+const config: SequelizeOptions = {
   username: DB_USER,
   password: DB_PASS,
   database: DB_NAME,

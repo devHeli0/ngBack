@@ -33,7 +33,11 @@ class Account extends Model<IAccount> {
   @Column(DataType.FLOAT)
   declare balance: number;
 
-  @BelongsTo(() => User, 'userId')
+  @BelongsTo(() => User, {
+    foreignKey: 'userId',
+    onDelete: 'CASCADE',
+  })
+  
   declare user?: NonAttribute<User>;
 
   @AllowNull(false)
