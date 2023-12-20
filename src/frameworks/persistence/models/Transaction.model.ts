@@ -1,4 +1,4 @@
-import { ITransaction } from '../../../interfaces/Transaction.interface';
+import { ITransaction } from '../../../interfaces/Transaction.interface'
 import {
   Model,
   Column,
@@ -10,9 +10,9 @@ import {
   Default,
   AllowNull,
   IsUUID,
-} from 'sequelize-typescript';
-import Account from './Account.model';
-import { NonAttribute } from 'sequelize';
+} from 'sequelize-typescript'
+import Account from './Account.model'
+import { NonAttribute } from 'sequelize'
 
 @Table({ tableName: 'Transactions' })
 class Transaction extends Model<ITransaction> {
@@ -21,30 +21,30 @@ class Transaction extends Model<ITransaction> {
   @PrimaryKey
   @IsUUID(4)
   @Column
-  declare id: string;
+  declare id: string
 
   @BelongsTo(() => Account, 'debitedAccountId')
-  declare debitedAccount?: NonAttribute<Account>;
+  declare debitedAccount?: NonAttribute<Account>
 
   @AllowNull(false)
   @IsUUID(4)
   @Column
-  debitedAccountId: string;
+  debitedAccountId: string
 
   @BelongsTo(() => Account, 'creditedAccountId')
-  declare creditedAccount?: NonAttribute<Account>;
+  declare creditedAccount?: NonAttribute<Account>
 
   @AllowNull(false)
   @IsUUID(4)
   @Column
-  creditedAccountId: string;
+  creditedAccountId: string
 
   @AllowNull(false)
   @Column(DataType.FLOAT)
-  value: number;
+  value: number
 
   @CreatedAt
-  creationDate: Date;
+  creationDate: Date
 }
 
-export default Transaction;
+export default Transaction

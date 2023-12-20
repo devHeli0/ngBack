@@ -5,6 +5,6 @@ export class UserEntity {
     public password: string,
     public creationDate?: Date,
     public updatedOn?: Date,
-    public deletionDate?: Date | undefined
+    public deletionDate?: Date | undefined,
   ) {}
 }

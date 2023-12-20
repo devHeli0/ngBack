@@ -1,9 +1,9 @@
-import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import 'reflect-metadata';
-import 'dotenv/config';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
+import 'reflect-metadata'
+import 'dotenv/config'
 
 class Database {
-  public sequelize: Sequelize;
+  public sequelize: Sequelize
 
   constructor() {
     this.sequelize = new Sequelize({
@@ -19,13 +19,13 @@ class Database {
         return (
           filename.substring(0, filename.indexOf('.model')) ===
           member.toLowerCase()
-        );
+        )
       },
-    });
+    })
     this.sequelize.addHook('afterBulkSync', () => {
-      console.log('Models sincronizados:', this.sequelize.models);
-    });
+      console.log('Models sincronizados:', this.sequelize.models)
+    })
   }
 }
-const database = new Database().sequelize;
-export default database;
+const database = new Database().sequelize
+export default database

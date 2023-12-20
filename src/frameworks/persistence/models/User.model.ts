@@ -11,9 +11,9 @@ import {
   AllowNull,
   PrimaryKey,
   AutoIncrement,
-} from 'sequelize-typescript';
-import { IUser } from '../../../interfaces';
-import { CreationOptional } from 'sequelize';
+} from 'sequelize-typescript'
+import { IUser } from '../../../interfaces'
+import { CreationOptional } from 'sequelize'
 
 @Table({ tableName: 'Users' })
 class User extends Model<IUser> {
@@ -21,26 +21,26 @@ class User extends Model<IUser> {
   @PrimaryKey
   @AllowNull(false)
   @Column(DataType.INTEGER)
-  declare id: CreationOptional<number>;
+  declare id: CreationOptional<number>
 
   @Length({ min: 3, max: 15 })
   @Unique
   @AllowNull(false)
   @Column(DataType.TEXT)
-  declare username: string;
+  declare username: string
 
   @AllowNull(false)
   @Column(DataType.CHAR)
-  declare password: string;
+  declare password: string
 
   @CreatedAt
-  declare creationDate: Date;
+  declare creationDate: Date
 
   @UpdatedAt
-  declare updatedOn: Date;
+  declare updatedOn: Date
 
   @DeletedAt
-  declare deletionDate: Date;
+  declare deletionDate: Date
 }
 
-export default User;
+export default User

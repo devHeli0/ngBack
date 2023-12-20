@@ -1,81 +1,80 @@
-import { Server } from '@overnightjs/core';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import { UserController } from './controlers';
-import { DatabaseInitializer } from './frameworks/persistence';
-import { GetAllUsersUseCase, RegisterUserUseCase } from './useCases';
-import { UserRepository } from './frameworks/persistence/repositories/UserRepository';
-import { AccountRepository } from './frameworks/persistence/repositories/AccountRepository';
+import { Server } from '@overnightjs/core'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import { UserController } from './controlers'
+import { DatabaseInitializer } from './frameworks/persistence'
+import { GetAllUsersUseCase, RegisterUserUseCase } from './useCases'
+import { UserRepository } from './frameworks/persistence/repositories/UserRepository'
+import { AccountRepository } from './frameworks/persistence/repositories/AccountRepository'
 
-require('dotenv').config();
+require('dotenv').config()
 
 class App extends Server {
-  private port = process.env.PORT;
+  private port = process.env.PORT
 
   constructor() {
-    super();
-    this.configureMiddleware();
-    this.setupControllers();
-    this.setupErrorHandling();
-    this.boostrap();
-    this.listen();
+    super()
+    this.configureMiddleware()
+    this.setupControllers()
+    this.setupErrorHandling()
+    this.boostrap()
+    this.listen()
   }
 
   public getApp() {
-    return this.app;
+    return this.app
   }
 
   private configureMiddleware() {
-    this.app.use(cors());
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(cors())
+    this.app.use(bodyParser.json())
+    this.app.use(bodyParser.urlencoded({ extended: true }))
   }
 
   private setupDependencies() {
-    const userRepository = new UserRepository();
-    const accountRepository = new AccountRepository();
-    const getAllUsersUseCase = new GetAllUsersUseCase(userRepository);
+    const userRepository = new UserRepository()
+    const accountRepository = new AccountRepository()
+    const getAllUsersUseCase = new GetAllUsersUseCase(userRepository)
     const registerUserUseCase = new RegisterUserUseCase(
       userRepository,
-      accountRepository
-    );
+      accountRepository,
+    )
 
     return {
       getAllUsersUseCase,
       registerUserUseCase,
-    };
+    }
   }
 
   private setupControllers() {
     // const server = new InversifyExpressServer(this.container);
 
-    const { getAllUsersUseCase, registerUserUseCase } =
-      this.setupDependencies();
+    const { getAllUsersUseCase, registerUserUseCase } = this.setupDependencies()
 
     const userController = new UserController(
       getAllUsersUseCase,
-      registerUserUseCase
-    );
+      registerUserUseCase,
+    )
 
-    super.addControllers([userController]);
+    super.addControllers([userController])
   }
 
   private setupErrorHandling() {
     this.app.use((err, req, res, next) => {
-      console.error(err);
-      res.status(500).send('Something broke!');
-    });
+      console.error(err)
+      res.status(500).send('Something broke!')
+    })
   }
 
   private async boostrap() {
-    await DatabaseInitializer.init();
+    await DatabaseInitializer.init()
   }
 
   private listen(): void {
     this.app.listen(this.port, () =>
-      console.log(`App is running on http://localhost:${this.port}`)
-    );
+      console.log(`App is running on http://localhost:${this.port}`),
+    )
   }
 }
 
-export default new App().getApp();
+export default new App().getApp()

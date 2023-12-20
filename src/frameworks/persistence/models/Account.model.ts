@@ -12,13 +12,13 @@ import {
   Default,
   PrimaryKey,
   IsUUID,
-} from 'sequelize-typescript';
-import { IAccount } from '../../../interfaces';
-import User from './User.model';
-import Transaction from './Transaction.model';
-import { NonAttribute } from 'sequelize';
+} from 'sequelize-typescript'
+import { IAccount } from '../../../interfaces'
+import User from './User.model'
+import Transaction from './Transaction.model'
+import { NonAttribute } from 'sequelize'
 
-const DEFAULT_BALANCE = 100;
+const DEFAULT_BALANCE = 100
 
 @Table({ tableName: 'Accounts' })
 class Account extends Model<IAccount> {
@@ -26,35 +26,34 @@ class Account extends Model<IAccount> {
   @PrimaryKey
   @IsUUID(4)
   @Column
-  declare id: string;
+  declare id: string
 
   @Default(DEFAULT_BALANCE)
   @AllowNull(false)
   @Column(DataType.FLOAT)
-  declare balance: number;
+  declare balance: number
 
   @BelongsTo(() => User, {
     foreignKey: 'userId',
     onDelete: 'CASCADE',
   })
-  
-  declare user?: NonAttribute<User>;
+  declare user?: NonAttribute<User>
 
   @AllowNull(false)
   @Column(DataType.INTEGER)
-  userId: number;
+  userId: number
 
   @HasMany(() => Transaction, 'debitedAccountId')
-  realizedTransactions: Transaction[];
+  realizedTransactions: Transaction[]
 
   @CreatedAt
-  creationDate: Date;
+  creationDate: Date
 
   @UpdatedAt
-  updatedOn: Date;
+  updatedOn: Date
 
   @DeletedAt
-  deletionDate: Date;
+  deletionDate: Date
 }
 
-export default Account;
+export default Account

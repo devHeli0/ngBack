@@ -1,7 +1,4 @@
-import {
-  GetAllUsersUseCase,
-  RegisterUserUseCase,
-} from './User.useCases';
+import { GetAllUsersUseCase, RegisterUserUseCase } from './User.useCases'
 
 export {
   //User
@@ -9,4 +6,4 @@ export {
   RegisterUserUseCase,
 
   //Account
-};
+}

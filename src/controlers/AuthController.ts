@@ -1,37 +1,37 @@
-import { NextFunction, Request, Response } from 'express';
-import { UserModel } from '../frameworks/persistence/models';
-var jwt = require('jsonwebtoken');
+import { NextFunction, Request, Response } from 'express'
+import { UserModel } from '../frameworks/persistence/models'
+const jwt = require('jsonwebtoken')
 
 class AuthController {
   public async getAccount(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> {
-    const { authorization } = req.headers;
+    const { authorization } = req.headers
 
     if (!authorization)
-      return res.status(401).json({ message: 'Acesso restrito!' });
+      return res.status(401).json({ message: 'Acesso restrito!' })
 
-    const token = authorization.replace('Bearer', '').trim();
+    const token = authorization.replace('Bearer', '').trim()
 
     try {
-      const decoded = jwt.verify(token, 'secret');
+      const decoded = jwt.verify(token, 'secret')
 
-      let user = await UserModel.findOne({
+      const user = await UserModel.findOne({
         where: { id: decoded.id },
-      });
+      })
 
       if (user) {
-        res.status(200).send();
+        res.status(200).send()
       } else {
-        res.status(409).send();
+        res.status(409).send()
       }
-      next();
-      return;
+      next()
+      return
     } catch {
-      return res.status(401).json({ mensagem: 'Token inválido!' });
+      return res.status(401).json({ mensagem: 'Token inválido!' })
     }
   }
 }
-export default new AuthController();
+export default new AuthController()

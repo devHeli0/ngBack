@@ -1,12 +1,12 @@
-import { TransactionEntity } from '../domain/entities';
+import { TransactionEntity } from '../domain/entities'
 
 export interface ITransaction {
-  id: string;
-  debitedAccountId: string;
-  creditedAccountId: string;
-  creationDate: Date;
+  id: string
+  debitedAccountId: string
+  creditedAccountId: string
+  creationDate: Date
 }
 
 export interface ITransactionRepository {
-  createTransaction(transactionData: any): Promise<TransactionEntity>;
+  createTransaction(transactionData: unknown): Promise<TransactionEntity>
 }

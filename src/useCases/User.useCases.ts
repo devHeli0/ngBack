@@ -1,11 +1,11 @@
-import { AccountEntity, UserEntity } from '../domain/entities';
-import { IAccountRepository, IUserRepository } from '../interfaces';
+import { AccountEntity, UserEntity } from '../domain/entities'
+import { IAccountRepository, IUserRepository } from '../interfaces'
 
 export class GetAllUsersUseCase {
   constructor(private userRepository: IUserRepository) {}
 
   async execute(): Promise<UserEntity[]> {
-    const users = await this.userRepository.getAllUsers();
+    const users = await this.userRepository.getAllUsers()
     return users.map(
       (user: UserEntity) =>
         new UserEntity(
@@ -14,29 +14,27 @@ export class GetAllUsersUseCase {
           user.password,
           user.creationDate,
           user.updatedOn,
-          user.deletionDate
-        )
-    );
+          user.deletionDate,
+        ),
+    )
   }
 }
 
 export class RegisterUserUseCase {
   constructor(
     private userRepository: IUserRepository,
-    private accountRepository: IAccountRepository
+    private accountRepository: IAccountRepository,
   ) {}
 
   async execute(
     username: string,
-    password: string
+    password: string,
   ): Promise<{ user: UserEntity; account: AccountEntity }> {
-    const newUser = await this.userRepository.createUser(
-      username,
-      password
-    );
+    const newUser = await this.userRepository.createUser(username, password)
 
-    const newAccount =
-      await this.accountRepository.createAccountForUser(newUser.id);
+    const newAccount = await this.accountRepository.createAccountForUser(
+      newUser.id,
+    )
 
     const user = new UserEntity(
       newUser.id,
@@ -44,11 +42,11 @@ export class RegisterUserUseCase {
       newUser.password,
       newUser.creationDate,
       newUser.updatedOn,
-      newUser.deletionDate
-    );
+      newUser.deletionDate,
+    )
 
-    const account = new AccountEntity(newAccount.id, newUser.id, 100);
+    const account = new AccountEntity(newAccount.id, newUser.id, 100)
 
-    return { user, account };
+    return { user, account }
   }
 }
