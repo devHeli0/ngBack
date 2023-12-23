@@ -7,6 +7,6 @@
   -p 6666:5432 \
   postgres:latest</code>
 <p>
-  If you're a linux user (Debian 12), Docker latest/stable 20.10.24 version that comes from Snapcraft may cause some troubles with the Docker(Microsoft) vscode extension. Considerer to install following the <a href=https://docs.docker.com/engine/install/debian/" target="_blank">apt repository steps</a>
+  If you're a linux user (Debian 12), Docker latest/stable 20.10.24 version that comes from Snapcraft may cause some troubles with the Docker(Microsoft) vscode extension. Considerer to install following the <a href="https://docs.docker.com/engine/install/debian/" target="_blank">apt repository steps</a>
 
 </p>
