@@ -30,7 +30,12 @@ export class RegisterUserUseCase {
     username: string,
     password: string,
   ): Promise<{ user: UserEntity; account: AccountEntity }> {
-    const newUser = await this.userRepository.createUser(username, password)
+    const hashedPassword = await this.userRepository.hashPassword(password)
+
+    const newUser = await this.userRepository.createUser(
+      username,
+      hashedPassword,
+    )
 
     const newAccount = await this.accountRepository.createAccountForUser(
       newUser.id,

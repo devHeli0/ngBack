@@ -1,6 +1,8 @@
 import { UserEntity } from '../../../domain/entities'
-import { IUser, IUserRepository } from '../../../interfaces'
+import { IUserRepository } from '../../../interfaces'
 import { User } from '../models'
+
+import bcrypt from 'bcrypt'
 
 export class UserRepository implements IUserRepository {
   async createUser(username: string, password: string): Promise<UserEntity> {
@@ -40,5 +42,17 @@ export class UserRepository implements IUserRepository {
       updatedOn: user.updatedOn,
     }))
     return mappedUsers
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    const saltRounds = 10
+    return bcrypt.hash(password, saltRounds)
+  }
+
+  async verifyPassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword)
   }
 }
