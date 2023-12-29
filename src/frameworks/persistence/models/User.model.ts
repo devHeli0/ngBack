@@ -30,7 +30,7 @@ class User extends Model<IUser> {
   declare username: string
 
   @AllowNull(false)
-  @Column(DataType.CHAR)
+  @Column(DataType.STRING)
   declare password: string
 
   @CreatedAt

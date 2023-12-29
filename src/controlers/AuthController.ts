@@ -1,37 +1,24 @@
-import { NextFunction, Request, Response } from 'express'
-import { UserModel } from '../frameworks/persistence/models'
-const jwt = require('jsonwebtoken')
+import { Request, Response } from 'express'
+import { Controller, Post } from '@overnightjs/core'
+import { AuthUserUseCase } from '../useCases'
 
-class AuthController {
-  public async getAccount(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response | void> {
-    const { authorization } = req.headers
+@Controller('login')
+export class AuthController {
+  constructor(private authUserUseCase: AuthUserUseCase) {}
 
-    if (!authorization)
-      return res.status(401).json({ message: 'Acesso restrito!' })
-
-    const token = authorization.replace('Bearer', '').trim()
+  @Post('')
+  public async login(req: Request, res: Response): Promise<Response | void> {
+    const { username, password } = req.body
 
     try {
-      const decoded = jwt.verify(token, 'secret')
-
-      const user = await UserModel.findOne({
-        where: { id: decoded.id },
-      })
-
-      if (user) {
-        res.status(200).send()
-      } else {
-        res.status(409).send()
-      }
-      next()
-      return
-    } catch {
-      return res.status(401).json({ mensagem: 'Token inválido!' })
+      const token = await this.authUserUseCase.authenticateUser(
+        username,
+        password,
+      )
+      return res.status(200).json({ token })
+    } catch (error) {
+      console.error(error)
+      return res.status(401).json(error)
     }
   }
 }
-export default new AuthController()

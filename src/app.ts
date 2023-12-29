@@ -1,9 +1,14 @@
 import { Server } from '@overnightjs/core'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import { UserController } from './controlers'
+import { AuthController, UserController } from './controlers'
 import { DatabaseInitializer } from './frameworks/persistence'
-import { GetAllUsersUseCase, RegisterUserUseCase } from './useCases'
+import {
+  AuthUserUseCase,
+  GetAllUsersUseCase,
+  GetUserUseCase,
+  RegisterUserUseCase,
+} from './useCases'
 import { UserRepository } from './frameworks/persistence/repositories/UserRepository'
 import { AccountRepository } from './frameworks/persistence/repositories/AccountRepository'
 
@@ -34,6 +39,8 @@ class App extends Server {
   private setupDependencies() {
     const userRepository = new UserRepository()
     const accountRepository = new AccountRepository()
+    const authUserUseCase = new AuthUserUseCase(userRepository)
+    const getUserUseCase = new GetUserUseCase(userRepository)
     const getAllUsersUseCase = new GetAllUsersUseCase(userRepository)
     const registerUserUseCase = new RegisterUserUseCase(
       userRepository,
@@ -41,7 +48,9 @@ class App extends Server {
     )
 
     return {
+      authUserUseCase,
       getAllUsersUseCase,
+      getUserUseCase,
       registerUserUseCase,
     }
   }
@@ -49,14 +58,22 @@ class App extends Server {
   private setupControllers() {
     // const server = new InversifyExpressServer(this.container);
 
-    const { getAllUsersUseCase, registerUserUseCase } = this.setupDependencies()
+    const {
+      authUserUseCase,
+      getAllUsersUseCase,
+      registerUserUseCase,
+      getUserUseCase,
+    } = this.setupDependencies()
 
     const userController = new UserController(
       getAllUsersUseCase,
+      getUserUseCase,
       registerUserUseCase,
     )
 
-    super.addControllers([userController])
+    const authController = new AuthController(authUserUseCase)
+
+    super.addControllers([userController, authController])
   }
 
   private setupErrorHandling() {

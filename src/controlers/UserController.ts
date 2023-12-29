@@ -2,19 +2,36 @@ import { Request, Response } from 'express'
 
 import { Controller, Get, Post } from '@overnightjs/core'
 
-import { GetAllUsersUseCase, RegisterUserUseCase } from '../useCases'
+import {
+  GetAllUsersUseCase,
+  GetUserUseCase,
+  RegisterUserUseCase,
+} from '../useCases'
 import { UserEntity } from '../domain/entities'
 
-import * as bcrypt from 'bcrypt'
-
-@Controller('api/user')
+@Controller('user')
 export class UserController {
   constructor(
     private getAllUsersUseCase: GetAllUsersUseCase,
+    private getUserUseCase: GetUserUseCase,
     private registerUserUseCase: RegisterUserUseCase,
   ) {
     this.getAllUsersUseCase = getAllUsersUseCase
     this.registerUserUseCase = registerUserUseCase
+    this.getUserUseCase = getUserUseCase
+  }
+
+  @Get('getUser')
+  async getUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { username } = req.body
+      const user: UserEntity | null =
+        await this.getUserUseCase.byUsernameExecute(username)
+      res.status(200).json(user)
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error: error })
+    }
   }
 
   @Get('getAllUsers')

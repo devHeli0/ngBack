@@ -30,6 +30,20 @@ export class UserRepository implements IUserRepository {
     return null
   }
 
+  async getUserByUsername(username: string): Promise<UserEntity | null> {
+    const user = await User.findOne({ where: { username } })
+    if (user) {
+      return {
+        id: user.id,
+        username: user.username,
+        password: user.password,
+        creationDate: user.creationDate,
+        updatedOn: user.updatedOn,
+      }
+    }
+    return null
+  }
+
   async getAllUsers(): Promise<UserEntity[]> {
     const users = await User.findAll({
       attributes: ['id', 'username', 'creationDate', 'updatedOn'],
@@ -46,13 +60,15 @@ export class UserRepository implements IUserRepository {
 
   async hashPassword(password: string): Promise<string> {
     const saltRounds = 10
-    return bcrypt.hash(password, saltRounds)
+    const rehashedPassword = await bcrypt.hash(password, saltRounds)
+    return rehashedPassword
   }
 
   async verifyPassword(
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword)
+    const isPasswordValid = await bcrypt.compare(password, hashedPassword)
+    return isPasswordValid
   }
 }

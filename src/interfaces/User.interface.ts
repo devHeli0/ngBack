@@ -11,13 +11,11 @@ export interface IUser {
 
 export interface IUserRepository {
   createUser(username: string, password: string): Promise<UserEntity>
+  getUserByUsername(username: string): Promise<UserEntity | null>
   getUserById(userId: number): Promise<UserEntity | null>
   getAllUsers(): Promise<UserEntity[]>
   hashPassword(password: string): Promise<string>
-  verifyPassword(
-    password: string,
-    hashedPassword: string,
-  ): Promise<boolean> 
+  verifyPassword(password: string, hashedPassword: string): Promise<boolean>
 }
 
 export interface IUserService {
