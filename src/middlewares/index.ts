@@ -1,4 +1,4 @@
 import AuthMiddleware from './AuthMiddleware'
-import ErrorHandlerMiddleware from './ErrorHandlerMiddleware'
+import errorHandlerMiddleware from './errorHandlerMiddleware'
 
-export { AuthMiddleware, ErrorHandlerMiddleware }
+export { AuthMiddleware, errorHandlerMiddleware }

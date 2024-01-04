@@ -117,25 +117,31 @@ export class AuthUserUseCase {
     this.SECRET = secret
   }
 
-  async authenticateUser(username: string, password: string): Promise<string> {
-    try {
-      const foundUser = await this.userRepository.getUserByUsername(username)
+  async authenticateUser(
+    username: string,
+    password: string,
+  ): Promise<{ token: string } | { error: string }> {
+    if (!username || !password) {
+      const errorReason = `${!username ? 'Username' : ''}${
+        !username && !password ? ' and ' : ''
+      }${!password ? 'Password' : ''} is missing`
 
-      if (
-        foundUser &&
-        (await this.userRepository.verifyPassword(password, foundUser.password))
-      ) {
-        const token = sign({ id: foundUser.id }, this.SECRET, {
-          expiresIn: '1d',
-        })
-
-        return token
-      }
-
-      return 'Authentication failed'
-    } catch (error) {
-      console.error('Authentication error:', error)
-      throw new Error('Authentication failed')
+      return { error: `${errorReason}` }
     }
+
+    const foundUser = await this.userRepository.getUserByUsername(username)
+
+    if (
+      !foundUser ||
+      !(await this.userRepository.verifyPassword(password, foundUser.password))
+    ) {
+      return { error: 'Authentication faield!' }
+    }
+
+    const token = sign({ id: foundUser.id }, this.SECRET, {
+      expiresIn: '1d',
+    })
+
+    return { token }
   }
 }

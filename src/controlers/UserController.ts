@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { ClassErrorMiddleware, Controller, Get, Post } from '@overnightjs/core'
 import {
   GetAllUsersUseCase,
@@ -6,8 +6,8 @@ import {
   RegisterUserUseCase,
 } from '../useCases'
 import { UserEntity } from '../domain/entities'
-import errorHandlerMiddleware from '../middlewares/errorHandlerMiddleware'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
+import { errorHandlerMiddleware } from '../middlewares'
 
 @ClassErrorMiddleware(errorHandlerMiddleware)
 @Controller('user')
@@ -23,13 +23,13 @@ export class UserController {
     const { username } = req.body
     const user: UserEntity | null =
       await this.getUserUseCase.byUsernameExecute(username)
-    res.status(200).json(user)
+    res.status(StatusCodes.OK).json(user)
   }
 
   @Get('getAllUsers')
   async getAllUsers(req: Request, res: Response): Promise<void> {
     const users: UserEntity[] = await this.getAllUsersUseCase.execute()
-    res.status(200).json(users)
+    res.status(StatusCodes.OK).json(users)
   }
 
   @Post('register')
@@ -51,6 +51,6 @@ export class UserController {
       return next(err)
     }
 
-    res.status(201).json(response)
+    res.status(StatusCodes.CREATED).json(response)
   }
 }
