@@ -5,6 +5,11 @@ import { User } from '../models'
 import bcrypt from 'bcrypt'
 
 export class UserRepository implements IUserRepository {
+  async userExists(username: string): Promise<boolean> {
+    const user = await User.findOne({ where: { username } })
+    return !!user
+  }
+
   async createUser(username: string, password: string): Promise<UserEntity> {
     const newUser = await User.create({
       username,

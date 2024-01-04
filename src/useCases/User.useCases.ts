@@ -66,7 +66,21 @@ export class RegisterUserUseCase {
   async execute(
     username: string,
     password: string,
-  ): Promise<{ user: UserEntity; account: AccountEntity }> {
+  ): Promise<{ user: UserEntity; account: AccountEntity } | { error: string }> {
+    if (!username || !password) {
+      const errorReason = `${!username ? 'Username' : ''}${
+        !username && !password ? ' and ' : ''
+      }${!password ? 'Password' : ''} is missing`
+
+      return { error: `${errorReason}` }
+    }
+
+    const userExists = await this.userRepository.userExists(username)
+
+    if (userExists) {
+      return { error: 'Username already exists' }
+    }
+
     const hashedPassword = await this.userRepository.hashPassword(password)
 
     const newUser = await this.userRepository.createUser(
@@ -106,8 +120,6 @@ export class AuthUserUseCase {
   async authenticateUser(username: string, password: string): Promise<string> {
     try {
       const foundUser = await this.userRepository.getUserByUsername(username)
-
-      console.log(this.SECRET)
 
       if (
         foundUser &&

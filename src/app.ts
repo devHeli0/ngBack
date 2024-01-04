@@ -11,17 +11,18 @@ import {
 } from './useCases'
 import { UserRepository } from './frameworks/persistence/repositories/UserRepository'
 import { AccountRepository } from './frameworks/persistence/repositories/AccountRepository'
+import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware'
 
-require('dotenv').config()
+import dotenv from 'dotenv'
+dotenv.config()
 
 class App extends Server {
   private port = process.env.PORT
 
   constructor() {
-    super()
+    super(true)
     this.configureMiddleware()
     this.setupControllers()
-    this.setupErrorHandling()
     this.boostrap()
     this.listen()
   }
@@ -34,6 +35,7 @@ class App extends Server {
     this.app.use(cors())
     this.app.use(bodyParser.json())
     this.app.use(bodyParser.urlencoded({ extended: true }))
+    this.app.use(errorHandlerMiddleware)
   }
 
   private setupDependencies() {
@@ -74,13 +76,6 @@ class App extends Server {
     const authController = new AuthController(authUserUseCase)
 
     super.addControllers([userController, authController])
-  }
-
-  private setupErrorHandling() {
-    this.app.use((err, req, res, next) => {
-      console.error(err)
-      res.status(500).send('Something broke!')
-    })
   }
 
   private async boostrap() {

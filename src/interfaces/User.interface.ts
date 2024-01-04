@@ -10,6 +10,7 @@ export interface IUser {
 }
 
 export interface IUserRepository {
+  userExists(username: string): Promise<boolean>
   createUser(username: string, password: string): Promise<UserEntity>
   getUserByUsername(username: string): Promise<UserEntity | null>
   getUserById(userId: number): Promise<UserEntity | null>

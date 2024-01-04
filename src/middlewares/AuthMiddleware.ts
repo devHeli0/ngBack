@@ -1,26 +1,38 @@
 import { NextFunction, Request, Response } from 'express'
-const jwt = require('jsonwebtoken')
+import {
+  ReasonPhrases,
+  StatusCodes,
+} from 'http-status-codes'
+
+import jwt from 'jsonwebtoken'
 
 class AuthMiddleware {
-  public authUserByToken(req: Request, res: Response, next: NextFunction) {
-    const { authorization } = req.headers
+  public authUserByToken(secret: string, fields: string[]) {
+    return (req: Request, res: Response, next: NextFunction) => {
+      const { authorization } = req.headers
 
-    if (!authorization)
-      return res.status(401).json({ message: 'Acesso restrito!' })
+      if (!authorization) {
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json(ReasonPhrases.UNAUTHORIZED)
+      }
 
-    const token = authorization.replace('Bearer', '').trim()
+      const token = authorization.replace('Bearer', '').trim()
 
-    try {
-      const decoded = jwt.verify(token, 'secret')
+      try {
+        const decoded: string | undefined = jwt.verify(token, secret)
 
-      const { id, user } = decoded //eu sei que tem id e user, em algum momento preciso do user
+        const tokenFields = { id: 'id' }
+        fields.forEach((field) => {
+          tokenFields[field] = decoded[field]
+        })
 
-      req.userId = id
-      req.userName = user
+        Object.assign(req, tokenFields)
 
-      return next()
-    } catch {
-      return res.status(401).json({ mensagem: 'Token inválido!' })
+        return next()
+      } catch {
+        return res.status(401).json({ mensagem: 'Token inválido!' })
+      }
     }
   }
 }
