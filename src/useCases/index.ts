@@ -1,8 +1,10 @@
+import { TransferValueUseCase } from './Account.useCases'
 import {
   AuthUserUseCase,
   GetAllUsersUseCase,
   GetUserUseCase,
   RegisterUserUseCase,
+
 } from './User.useCases'
 
 export {
@@ -13,4 +15,5 @@ export {
   RegisterUserUseCase,
 
   //Account
+  TransferValueUseCase
 }

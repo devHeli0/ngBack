@@ -8,12 +8,15 @@ import {
   GetAllUsersUseCase,
   GetUserUseCase,
   RegisterUserUseCase,
+  TransferValueUseCase,
 } from './useCases'
 import { UserRepository } from './frameworks/persistence/repositories/UserRepository'
 import { AccountRepository } from './frameworks/persistence/repositories/AccountRepository'
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware'
 
 import dotenv from 'dotenv'
+import { TransactionRepository } from './frameworks/persistence/repositories/TransactionRepository'
+import { AccountController } from './controlers/AccountController'
 dotenv.config()
 
 class App extends Server {
@@ -48,8 +51,14 @@ class App extends Server {
       userRepository,
       accountRepository,
     )
+    const transactionRepository = new TransactionRepository()
+    const transferValueUseCase = new TransferValueUseCase(
+      accountRepository,
+      transactionRepository,
+    )
 
     return {
+      transferValueUseCase,
       authUserUseCase,
       getAllUsersUseCase,
       getUserUseCase,
@@ -61,6 +70,7 @@ class App extends Server {
     // const server = new InversifyExpressServer(this.container);
 
     const {
+      transferValueUseCase,
       authUserUseCase,
       getAllUsersUseCase,
       registerUserUseCase,
@@ -75,7 +85,9 @@ class App extends Server {
 
     const authController = new AuthController(authUserUseCase)
 
-    super.addControllers([userController, authController])
+    const accountController = new AccountController(transferValueUseCase)
+
+    super.addControllers([userController, authController, accountController])
   }
 
   private async boostrap() {

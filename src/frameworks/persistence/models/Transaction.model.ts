@@ -7,7 +7,6 @@ import {
   Table,
   BelongsTo,
   PrimaryKey,
-  Default,
   AllowNull,
   IsUUID,
 } from 'sequelize-typescript'
@@ -16,11 +15,10 @@ import { NonAttribute } from 'sequelize'
 
 @Table({ tableName: 'Transactions' })
 class Transaction extends Model<ITransaction> {
-  @Default(DataType.UUIDV4)
   @AllowNull(false)
   @PrimaryKey
   @IsUUID(4)
-  @Column
+  @Column(DataType.STRING)
   declare id: string
 
   @BelongsTo(() => Account, 'debitedAccountId')

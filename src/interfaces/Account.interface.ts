@@ -1,4 +1,4 @@
-import { ITransaction } from '.'
+import { ITransaction, ITransactionRepository } from '.'
 import { AccountEntity } from '../domain/entities'
 
 export interface IAccount {
@@ -13,6 +13,14 @@ export interface IAccount {
 
 export interface IAccountRepository {
   createAccountForUser(userId: number): Promise<AccountEntity>
+  transferValue(
+    id: string,
+    debitedAccountId: string,
+    creditedAccountId: string,
+    value: number,
+    creationDate: Date,
+    TransactionRepository: ITransactionRepository,
+  ): Promise<{ transference: boolean } | { error: string }>
 }
 
 export interface IAccountService {

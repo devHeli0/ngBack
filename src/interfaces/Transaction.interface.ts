@@ -4,9 +4,13 @@ export interface ITransaction {
   id: string
   debitedAccountId: string
   creditedAccountId: string
+  value: number
   creationDate: Date
 }
 
 export interface ITransactionRepository {
-  createTransaction(transactionData: unknown): Promise<TransactionEntity>
+  createTransaction(
+    transactionData: TransactionEntity,
+  ): Promise<TransactionEntity>
+  getTransaction(transactionId: string): Promise<TransactionEntity | null>
 }
